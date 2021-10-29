@@ -1,0 +1,119 @@
+﻿@page "/"
+
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using raspberry_mqqt_motion_alarm.Services.Interfaces
+@using raspberry_mqqt_motion_alarm.Models
+
+@inject IZoneService ZoneService
+@inject ProtectedLocalStorage LocalStorage
+
+@if (SignedIn == false)
+{
+
+
+    <MatButtonLink Href="/Checkbox">Add Zone</MatButtonLink>
+
+
+    <MatAccordion>
+
+        @foreach (var zone in zones)
+        {
+
+            <MatExpansionPanel>
+                <MatExpansionPanelSummary>
+                    <MatExpansionPanelHeader><h5 class="mat-h5">@zone.Name</h5></MatExpansionPanelHeader>
+                    <MatExpansionPanelSubHeader>
+
+
+                    </MatExpansionPanelSubHeader>
+                </MatExpansionPanelSummary>
+                <MatExpansionPanelDetails>
+
+                    <MatList SingleSelection="true">
+
+                        @foreach (var detector in zone.MotionDetectors)
+                        {
+                            <MatListItem OnClick="@(e => { current = detector;  dialogIsOpen = true; })">
+                                @detector.Name
+                            </MatListItem>
+                        }
+
+                    </MatList>
+                    <MatButtonLink Href="/Checkbox">Add Detector</MatButtonLink>
+                </MatExpansionPanelDetails>
+            </MatExpansionPanel>
+        }
+
+
+
+    </MatAccordion>
+
+
+    @if (current != null)
+    {
+        <MatDialog @bind-IsOpen="@dialogIsOpen">
+            <MatDialogTitle>@current.Name</MatDialogTitle>
+            <MatDialogContent>
+                <p>Settings</p>
+                <MatTextField TValue="decimal"  Label="Raspberry Pin">@current.RaspBerryPin</MatTextField>
+
+
+
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton OnClick="@(e => { dialogIsOpen = false; })">Save</MatButton>
+                <MatButton >Cancel</MatButton>
+
+            </MatDialogActions>
+        </MatDialog>
+    }
+
+
+
+    @code
+        {
+        bool dialogIsOpen = false;
+    }
+}
+
+
+
+@code {
+    private bool SignedIn = false;
+    private const string _localStorage = "ApiKey";
+    private IEnumerable<Zone> zones;
+    private MotionDetector current;
+
+    private string api;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        var result = await LocalStorage.GetAsync<string>(_localStorage);
+
+        api = result.Value;
+
+    }
+
+
+
+    protected override void OnInitialized()
+    {
+        zones = ZoneService.FindAll();
+
+    }
+
+
+    string stringValue = "";
+
+    private void SetValue(string Value)
+    {
+        stringValue = Value;
+    }
+
+
+
+    private async Task SaveToLocalStorageAsync()
+    {
+        await LocalStorage.SetAsync(_localStorage, stringValue);
+    }
+}

@@ -1,0 +1,12 @@
+﻿{
+  "Api_Url": "http://*:5001",
+  "Api_Password": "test",
+  "Motion_Active_before_alarm_Seconds": 20,
+  "Mqtt_Host": "192.168.1.165",
+  "Mqtt_Port": 181,
+  "Mqtt_User": "mqqt_user",
+  "Mqtt_Password": "Test123!123",
+  "Mqtt_Alarm_Message_Active": "payload_on",
+  "Mqtt_Alarm_Message_InActive": "payload_off",
+  "Mqtt_Alarm_Uptime_Monitoring": "motion"
+}
