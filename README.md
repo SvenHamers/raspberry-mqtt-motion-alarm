@@ -1,6 +1,7 @@
 # raspberry-mqqt-motion-alarm
+## !! WORK IN PROGRESS !!
 
-App  you can install for monitoring wired security detectors connected to raspberry pi gpio pins and publish motion detections to mqqt topics with an easy to use web interface
+.netcore service you can install for monitoring wired security detectors connected to raspberry pi gpio pins and publish motion detections to mqtt topics with an easy to use web interface
 
 
 You can add motion zones and add detectors based on the connected raspberry gpio pin
