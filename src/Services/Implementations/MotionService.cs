@@ -34,19 +34,19 @@ namespace raspberry_mqqt_motion_alarm.Services.Implementations
                 .Find(x => x.Name == zone).FirstOrDefault().MotionDetectors.FirstOrDefault(x => x.Id == motionDetectorId);
         }
 
-        public Guid Insert(string zone, MotionDetector forecast)
+        public Guid Insert(string zone, MotionDetector motion)
         {
 
-            forecast.Id = Guid.NewGuid();
+            motion.Id = Guid.NewGuid();
 
             var result = _liteDb.GetCollection<Zone>(_document)
                 .Find(x => x.Name == zone).FirstOrDefault();
 
 
-            result.MotionDetectors.Add(forecast);
+            result.MotionDetectors.Add(motion);
 
             Update(result);
-            return forecast.Id;
+            return motion.Id;
         }
 
         public bool Update(Zone forecast)
